@@ -1,0 +1,8 @@
+SELECT COUNT(*)
+FROM EMP 
+WHERE SAL < ( SELECT SAL
+	      FROM EMP
+	      WHERE EMPNO = (SELECT MGR
+	     		     FROM EMP
+	     		     WHERE ENAME='BLAKE'))
+/

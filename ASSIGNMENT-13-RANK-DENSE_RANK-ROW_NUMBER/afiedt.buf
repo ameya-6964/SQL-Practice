@@ -1,0 +1,11 @@
+SELECT ENAME, JOB, SAL
+    FROM (
+        SELECT DENSE_RANK() OVER (ORDER BY EMPNO ASC) AS RANK,EMP.*
+        FROM EMP
+        WHERE DEPTNO IN (
+            SELECT DEPTNO 
+            FROM DEPT 
+            WHERE LOC IN ('DALLAS', 'CHICAGO')
+      )
+   )
+  WHERE RANK <= 4

@@ -1,0 +1,257 @@
+CL SCR
+SQL> SELECT MAX(SAL)
+  2  FROM EMP
+  3  WHERE SAL <
+  4     (SELECT MAX
+  5     FROM EMP
+  6     WHERE SAL <
+  7        (SELECT MAX(SAL)
+  8         FROM EMP
+  9         WHERE SAL <
+ 10                  (SELECT MAX(SAL)
+ 11                  FROM EMP
+ 12                  WHERE SAL <
+ 13              (SELECT MAX(SAL)
+ 14                         FROM EMP))));
+   (SELECT MAX
+           *
+ERROR at line 4:
+ORA-00904: "MAX": invalid identifier 
+
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1  SELECT MAX(SAL)
+  2  FROM EMP
+  3  WHERE SAL <
+  4     (SELECT MAX(SAL)
+  5     FROM EMP
+  6     WHERE SAL <
+  7        (SELECT MAX(SAL)
+  8         FROM EMP
+  9         WHERE SAL <
+ 10                  (SELECT MAX(SAL)
+ 11                  FROM EMP
+ 12                  WHERE SAL <
+ 13              (SELECT MAX(SAL)
+ 14*                        FROM EMP))))
+SQL> /
+
+  MAX(SAL)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      2450                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1     SELECT ENAME
+  2     FROM EMP
+  3     WHERE SAL = 
+  4        (SELECT MAX(SAL)
+  5         FROM EMP
+  6         WHERE SAL <
+  7                  (SELECT MAX(SAL)
+  8                  FROM EMP
+  9                  WHERE SAL <
+ 10              (		SELECT MAX(SAL)
+ 11*                        FROM EMP)))
+SQL> /
+
+ENAME                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+JONES                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT EMPNO
+  2  FROM EMP
+  3  WHERE SAL =
+  4              (SELECT MAX(SAL)
+  5               FROM EMP
+  6               WHERE SAL <
+  7              		(SELECT MAX(SAL)
+  8*                        FROM EMP))
+SQL> /
+
+     EMPNO                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      7788                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+      7902                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT DNAME
+  2  FROM DEPT
+  3  WHERE DEPTNO IN
+  4  (SELECT DEPTNO
+  5  FROM EMP
+  6  WHERE SAL =
+  7  	(SELECT MAX(SAL)
+  8               FROM EMP
+  9               WHERE SAL <
+ 10                          (SELECT MAX(SAL)
+ 11                           FROM EMP
+ 12                           WHERE SAL <
+ 13                                      (SELECT MAX(SAL)
+ 14                                       FROM EMP
+ 15                                       WHERE SAL <
+ 16              		                        (SELECT MAX(SAL)
+ 17*                                                  FROM EMP))))
+SQL> /
+                                                 FROM EMP))))
+                                                            *
+ERROR at line 17:
+ORA-00907: missing right parenthesis 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT DNAME
+  2  FROM DEPT
+  3  WHERE DEPTNO IN
+  4  (SELECT DEPTNO
+  5  FROM EMP
+  6  WHERE SAL =
+  7  	(SELECT MAX(SAL)
+  8               FROM EMP
+  9               WHERE SAL <
+ 10                          (SELECT MAX(SAL)
+ 11                           FROM EMP
+ 12                           WHERE SAL <
+ 13                                      (SELECT MAX(SAL)
+ 14                                       FROM EMP
+ 15                                       WHERE SAL <
+ 16              		                        (SELECT MAX(SAL)
+ 17*                                                  FROM EMP)))))
+SQL> /
+
+DNAME                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+--------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+SALES                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT DNAME
+  2  FROM DEPT
+  3  WHERE DEPTNO IN
+  4  (SELECT DEPTNO
+  5  FROM EMP
+  6  WHERE SAL =
+  7  	(SELECT MAX(SAL)
+  8               FROM EMP
+  9               WHERE SAL <
+ 10              		(SELECT MAX(SAL)
+ 11*                          FROM EMP)))
+SQL> /
+
+DNAME                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+--------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+RESEARCH                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT *
+  2  FROM EMP
+  3  WHERE HIREDATE =
+  4  	(SELECT MIN(HIREDATE)
+  5               FROM EMP
+  6               WHERE HIREDATE >
+  7              		(SELECT MIN(HIREDATE)
+  8*                          FROM EMP))
+  9  /
+
+     EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+---------- ---------- --------- ---------- --------- ---------- ---------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      7499 ALLEN      SALESMAN        7698 20-FEB-81       1600        300         30                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT ENAME
+  2  FROM EMP
+  3  WHERE HIREDATE =
+  4  	(SELECT MAX(HIREDATE)
+  5               FROM EMP
+  6               WHERE HIREDATE <
+  7              		(SELECT MAX(HIREDATE)
+  8*                          FROM EMP))
+SQL> /
+
+ENAME                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+SCOTT                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT LOC 
+  2  FROM DEPT
+  3  WHERE LOC IN 
+  4  	    (SELECT DEPTNO
+  5  	     FROM EMP
+  6  	     WHERE HIREDATE = 
+  7  			     (SELECT MIN(HIREDATE)
+  8*                                FROM EMP))
+SQL> /
+WHERE LOC IN 
+      *
+ERROR at line 3:
+ORA-01722: invalid number 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT LOC 
+  2  FROM DEPT
+  3  WHERE DEPTNO IN 
+  4  	    (SELECT DEPTNO
+  5  	     FROM EMP
+  6  	     WHERE HIREDATE = 
+  7  			     (SELECT MIN(HIREDATE)
+  8*                                FROM EMP))
+SQL> /
+
+LOC                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+-------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+DALLAS                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT *
+  2  FROM EMP
+  3  WHERE SAL = 
+  4      (SELECT MIN(SAL)
+  5       FROM EMP
+  6       WHERE SAL > 
+  7           (SELECT MIN(SAL)
+  8            FROM EMP
+  9            WHERE SAL > 
+ 10                (SELECT MIN(SAL)
+ 11                 FROM EMP
+ 12                 WHERE SAL > 
+ 13                     (SELECT MIN(SAL)
+ 14                      FROM EMP
+ 15                      WHERE SAL > 
+ 16                          (SELECT MIN(SAL)
+ 17                           FROM EMP
+ 18                           WHERE SAL > 
+ 19                               (SELECT MIN(SAL)
+ 20                                FROM EMP
+ 21                                WHERE SAL > 
+ 22                                    (SELECT MIN(SAL)
+ 23*                                    FROM EMP)))))))
+SQL> /
+
+     EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+---------- ---------- --------- ---------- --------- ---------- ---------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      7499 ALLEN      SALESMAN        7698 20-FEB-81       1600        300         30                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+
+SQL> SPOOL OFF

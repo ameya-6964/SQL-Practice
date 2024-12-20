@@ -1,0 +1,98 @@
+SQL> ED
+Wrote file afiedt.buf
+
+  1  CREATE TABLE SHOP
+  2  (
+  3  PID NUMBER(3) PRIMARY KEY,
+  4  PNAME VARCHAR(10) NOT NULL,
+  5  PRICE NUMBER(10,3) NOT NULL,
+  6  QUANTITY NUMBER(3) NOT NULL,
+  7  COMPANY VARCHAR(10) NOT NULL,
+  8  CONSTRAINT PRICE_CHECK CHECK(PRICE > 100),
+  9  CHECK(QUANTITY > 0)
+ 10* )
+SQL> /
+
+Table created.
+
+SQL> SELECT *
+  2  FROM TAB;
+
+TNAME                          TABTYPE  CLUSTERID                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+------------------------------ ------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+DEPT                           TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+EMP                            TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+BONUS                          TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+SALGRADE                       TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+SHOP                           TABLE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+
+SQL> RENAME SHOP TO DUKAN
+  2  ;
+
+Table renamed.
+
+SQL> ALTER TABLE DUKAN
+  2  ADD XYZ VARCHAR(10) NOT NULL;
+
+Table altered.
+
+SQL> DESC DUKAN
+ PID                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               NOT NULL NUMBER(3)
+ PNAME                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             NOT NULL VARCHAR2(10)
+ PRICE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             NOT NULL NUMBER(10,3)
+ QUANTITY                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          NOT NULL NUMBER(3)
+ COMPANY                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           NOT NULL VARCHAR2(10)
+ XYZ                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               NOT NULL VARCHAR2(10)
+
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  ALTER TABLE DUKAN
+  2* DROP COLUMN XYZ
+SQL> /
+
+Table altered.
+
+SQL> DESC DUKAN;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          NOT NULL NUMBER(3)
+ PNAME                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             NOT NULL VARCHAR2(10)
+ PRICE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             NOT NULL NUMBER(10,3)
+ QUANTITY                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          NOT NULL NUMBER(3)
+ COMPANY                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           NOT NULL VARCHAR2(10)
+
+SQL> ALTER TABLE DUKAN
+  2  RENAME COLUMN COMPANY TO BRAND;
+
+Table altered.
+
+SQL> DESC DUKAN;
+ PID                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               NOT NULL NUMBER(3)
+ PNAME                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             NOT NULL VARCHAR2(10)
+ PRICE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             NOT NULL NUMBER(10,3)
+ QUANTITY                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          NOT NULL NUMBER(3)
+ BRAND                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             NOT NULL VARCHAR2(10)
+
+SQL> INSERT INTO DUKAN VALUES (&PID,&PNAME,&PRICE,&QUANTITY,&BRAND);
+Enter value for pid: 1
+Enter value for pname: 'SHOES'
+Enter value for price: 4000
+Enter value for quantity: 5
+Enter value for brand: 'ADIDAS'
+old   1: INSERT INTO DUKAN VALUES (&PID,&PNAME,&PRICE,&QUANTITY,&BRAND)
+new   1: INSERT INTO DUKAN VALUES (1,'SHOES',4000,5,'ADIDAS')
+
+1 row created.
+
+SQL> INSERT INTO DUKAN VALUES (&PID,&PNAME,&PRICE,&QUANTITY,&BRAND);
+Enter value for pid: 2
+Enter value for pname: 'SHIRT'
+Enter value for price: 400
+Enter value for quantity: 5
+Enter value for brand: 'NIKE'
+old   1: INSERT INTO DUKAN VALUES (&PID,&PNAME,&PRICE,&QUANTITY,&BRAND)
+new   1: INSERT INTO DUKAN VALUES (2,'SHIRT',400,5,'NIKE')
+
+1 row created.
+
+SQL> SPOOL OFF;

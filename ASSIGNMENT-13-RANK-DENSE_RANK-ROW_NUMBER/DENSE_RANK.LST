@@ -1,0 +1,203 @@
+SQL> ED
+Wrote file afiedt.buf
+
+  1   SELECT *
+  2   FROM (SELECT DENSE_RANK() OVER (ORDER BY EMPNO ASC) AS RANK,EMP.*
+  3         FROM EMP)
+  4*  WHERE RANK <= 2
+  5  /
+
+      RANK      EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                                                                                                                                                                                                                                                                                    
+---------- ---------- ---------- --------- ---------- --------- ---------- ---------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                    
+         1       7369 SMITH      CLERK           7902 17-DEC-80        800                    20                                                                                                                                                                                                                                                                                                                                                                                                                    
+         2       7499 ALLEN      SALESMAN        7698 20-FEB-81       1600        300         30                                                                                                                                                                                                                                                                                                                                                                                                                    
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT *
+  2  FROM (SELECT DENSE_RANK() OVER (ORDER BY EMPNO ASC) AS RANK,EMP.*
+  3            FROM EMP)
+  4*  WHERE RANK BETWEEN 7 AND 10
+SQL> /
+
+      RANK      EMPNO ENAME      JOB              MGR HIREDATE         SAL       COMM     DEPTNO                                                                                                                                                                                                                                                                                                                                                                                                                    
+---------- ---------- ---------- --------- ---------- --------- ---------- ---------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                    
+         7       7782 CLARK      MANAGER         7839 09-JUN-81       2450                    10                                                                                                                                                                                                                                                                                                                                                                                                                    
+         8       7788 SCOTT      ANALYST         7566 19-APR-87       3000                    20                                                                                                                                                                                                                                                                                                                                                                                                                    
+         9       7839 KING       PRESIDENT            17-NOV-81       5000                    10                                                                                                                                                                                                                                                                                                                                                                                                                    
+        10       7844 TURNER     SALESMAN        7698 08-SEP-81       1500          0         30                                                                                                                                                                                                                                                                                                                                                                                                                    
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT *
+  2  FROM (SELECT DENSE_RANK() OVER (ORDER BY SAL DESC) AS RANK,SAL
+  3         FROM EMP)
+  4* WHERE RANK <=4
+SQL> /
+
+      RANK        SAL                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+---------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+         1       5000                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+         2       3000                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+         3       2975                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+         4       2850                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT *
+  2  FROM (SELECT DENSE_RANK() OVER (ORDER BY SAL DESC) AS RANK,SAL
+  3         FROM EMP)
+  4* WHERE RANK IN(2,5)
+SQL> /
+
+      RANK        SAL                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+---------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+         2       3000                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+         5       2450                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT COUNT(*)
+  2  FROM EMP
+  3  WHERE SAL IN (SELECT SAL 
+  4      	FROM (SELECT DENSE_RANK() OVER (ORDER BY SAL ASC) AS RANK,SAL
+  5             FROM EMP )
+  6*   	      WHERE RANK = 4)
+SQL> /
+
+  COUNT(*)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+         2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT EMPNO,ENAME,JOB,SAL,TO_CHAR(HIREDATE,'FMDAY')
+  2  FROM (SELECT DENSE_RANK() OVER (ORDER BY EMPNO ASC) AS RANK,EMP.*
+  3        FROM EMP)
+  4* WHERE MOD(SAL,2) = 0
+SQL> /
+
+     EMPNO ENAME      JOB              SAL TO_CHAR(H                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+---------- ---------- --------- ---------- ---------                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+      7369 SMITH      CLERK            800 WEDNESDAY                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+      7499 ALLEN      SALESMAN        1600 FRIDAY                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      7521 WARD       SALESMAN        1250 SUNDAY                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      7654 MARTIN     SALESMAN        1250 MONDAY                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      7698 BLAKE      MANAGER         2850 FRIDAY                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      7782 CLARK      MANAGER         2450 TUESDAY                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+      7788 SCOTT      ANALYST         3000 SUNDAY                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+      7839 KING       PRESIDENT       5000 TUESDAY                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+      7844 TURNER     SALESMAN        1500 TUESDAY                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+      7876 ADAMS      CLERK           1100 SATURDAY                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+      7900 JAMES      CLERK            950 THURSDAY                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+      7902 FORD       ANALYST         3000 THURSDAY                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+      7934 MILLER     CLERK           1300 SATURDAY                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+
+13 rows selected.
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT EMPNO,ENAME,JOB,SAL
+  2  FROM (SELECT DENSE_RANK() OVER (ORDER BY EMPNO DESC) AS RANK,EMP.*
+  3  	FROM EMP)
+  4*  WHERE RANK <=2
+SQL> /
+
+     EMPNO ENAME      JOB              SAL                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+---------- ---------- --------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+      7934 MILLER     CLERK           1300                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+      7902 FORD       ANALYST         3000                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT *
+  2  FROM DEPT
+  3  WHERE DEPTNO = (SELECT DEPTNO
+  4      		FROM (SELECT DESNSE_RANK() OVER (ORDER BY EMPNO DESC) AS RANK,EMP.*
+  5            	     FROM EMP)
+  6*  		WHERE RANK = 1 )
+SQL> /
+    		FROM (SELECT DESNSE_RANK() OVER (ORDER BY EMPNO DESC) AS RANK,EMP.*
+    		             *
+ERROR at line 4:
+ORA-00904: "DESNSE_RANK": invalid identifier 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT *
+  2  FROM DEPT
+  3  WHERE DEPTNO = (SELECT DEPTNO
+  4      		FROM (SELECT DENSE_RANK() OVER (ORDER BY EMPNO DESC) AS RANK,EMP.*
+  5            	     FROM EMP)
+  6*  		WHERE RANK = 1 )
+SQL> /
+
+    DEPTNO DNAME          LOC                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+---------- -------------- -------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+        10 ACCOUNTING     NEW YORK                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT *
+  2  FROM DEPT
+  3  WHERE DEPTNO = (SELECT DEPTNO
+  4      		FROM (SELECT DENSE_RANK() OVER (ORDER BY EMPNO ASC) AS RANK,EMP.*
+  5            	     FROM EMP)
+  6*  		WHERE RANK <=5 )
+SQL> /
+WHERE DEPTNO = (SELECT DEPTNO
+                *
+ERROR at line 3:
+ORA-01427: single-row subquery returns more than one row 
+
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT *
+  2  FROM DEPT
+  3  WHERE DEPTNO IN (SELECT DEPTNO
+  4      		FROM (SELECT DENSE_RANK() OVER (ORDER BY EMPNO ASC) AS RANK,EMP.*
+  5            	     FROM EMP)
+  6*  		WHERE RANK <=5 )
+SQL> //
+
+    DEPTNO DNAME          LOC                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+---------- -------------- -------------                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+        30 SALES          CHICAGO                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+        20 RESEARCH       DALLAS                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  SELECT ENAME, JOB, SAL
+  2      FROM (
+  3          SELECT DENSE_RANK() OVER (ORDER BY EMPNO ASC) AS RANK,EMP.*
+  4          FROM EMP
+  5          WHERE DEPTNO IN (
+  6              SELECT DEPTNO 
+  7              FROM DEPT 
+  8              WHERE LOC IN ('DALLAS', 'CHICAGO')
+  9        )
+ 10     )
+ 11*   WHERE RANK <= 4
+SQL> /
+
+ENAME      JOB              SAL                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+---------- --------- ----------                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+SMITH      CLERK            800                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+ALLEN      SALESMAN        1600                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+WARD       SALESMAN        1250                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+JONES      MANAGER         2975                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+
+SQL> SPOOL OFF;
